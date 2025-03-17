@@ -1,50 +1,60 @@
 import { useEffect, useState } from 'react';
 import styles from './styles.module.css';
+import slider from './slider.module.css';
+import metal from './metal.module.css';
 import { FaPowerOff } from "react-icons/fa";
 
 const keys = {
-	'Q': { 
-		text: 'Heater 1', 
-		backgroundColor: '#FF8A66', // Lighter by 30%
+	'Q': {
+		text: 'Heater 1',
+		sound: 'Heater-1.mp3',
+		backgroundColor: '#FF8A66',
 	},
-	'W': { 
-		text: 'Heater 2', 
-		backgroundColor: '#FFB84D', // Lighter by 30%
+	'W': {
+		text: 'Heater 2',
+		sound: 'Heater-2.mp3',
+		backgroundColor: '#FFB84D',
 	},
-	'E': { 
-		text: 'Heater 3', 
-		backgroundColor: '#FFDC66', // Lighter by 30%
+	'E': {
+		text: 'Heater 3',
+		sound: 'Heater-3.mp3',
+		backgroundColor: '#FFDC66',
 	},
-	'A': { 
-		text: 'Heater 4', 
-		backgroundColor: '#E4F9D0', // Lighter by 30%
+	'A': {
+		text: 'Heater 4',
+		sound: 'Heater-4_1.mp3',
+		backgroundColor: '#E4F9D0',
 	},
-	'S': { 
-		text: 'Clap', 
-		backgroundColor: '#66FF8F', // Lighter by 30%
+	'S': {
+		text: 'Clap',
+		sound: 'Heater-6.mp3',
+		backgroundColor: '#66FF8F',
 	},
-	'D': { 
-		text: 'Open-HH', 
-		backgroundColor: '#4CFFB8', // Lighter by 30%
+	'D': {
+		text: 'Open-HH',
+		sound: 'Dsc_Oh.mp3',
+		backgroundColor: '#4CFFB8',
 	},
-	'Z': { 
-		text: "Kick-n'-Hat", 
-		backgroundColor: '#66FFFF', // Lighter by 30%
+	'Z': {
+		text: "Kick-n'-Hat",
+		sound: 'Kick_n_Hat.mp3',
+		backgroundColor: '#66FFFF',
 	},
-	'X': { 
-		text: 'Kick', 
-		backgroundColor: '#6699FF', // Lighter by 30%
-		 // 30% opacity shadow
+	'X': {
+		text: 'Kick',
+		sound: 'RP4_KICK_1.mp3',
+		backgroundColor: '#6699FF',
 	},
-	'C': { 
-		text: 'Closed-HH', 
-		backgroundColor: '#B966FF', // Lighter by 30%
+	'C': {
+		text: 'Closed-HH',
+		sound: 'Cev_H2.mp3',
+		backgroundColor: '#B966FF',
 	}
 };
 
-const PowerButton = ({status, onClick}) => {
-	const isOn = status === 'on'; 
-	const buttonStyle = isOn? styles.on : styles.off;
+const PowerButton = ({ status, onClick }) => {
+	const isOn = status === 'on';
+	const buttonStyle = isOn ? styles.on : styles.off;
 
 	return (
 		<div className={`${styles.powerButton} ${buttonStyle}`} onClick={onClick}>
@@ -53,60 +63,86 @@ const PowerButton = ({status, onClick}) => {
 	)
 }
 
-const Buttons = ({status, clickedButtons, onClick}) => {
+const DrumPads = ({ status, clickedButtons, onClick }) => {
 	return Object.keys(keys).map((key) => {
-		const isClicked = clickedButtons[key]; 
-		const buttonStyle = isClicked ? styles.clicked : styles.normal;
-		const backgroundColor = isClicked && status === 'on'? keys[key].backgroundColor : 'rgb(230, 230, 230)';
+		const sound = keys[key]['sound'];
+		const isClicked = clickedButtons[key];
+		const drumPadStyle = isClicked ? styles.clicked : styles.normal;
+		const backgroundColor = isClicked && status === 'on' ? keys[key].backgroundColor : 'rgb(230, 230, 230)';
 
 		return (
-			<div key={key} className={`${styles.buttons} ${buttonStyle}`} style={{ backgroundColor }} onClick={() => onClick(key)}>
-				<p>{key}</p>
-			</div>	
+			<div id={keys[key].text} key={keys[key].text}
+				className={`drum-pad ${styles.drumPad} ${drumPadStyle}`} style={{ backgroundColor }}
+				onClick={() => onClick(key, event)}>
+				<audio id={key} className='clip' src={`src/assets/sounds/${sound}`}>Your browser does not support the audio element.</audio>
+				{key}
+			</div>
 		)
 	})
+}
+
+const VolumeControl = ({value, onChange}) => {
+	return (
+		<input className={slider.slider} type='range' min='0' max='100' step='1' value={value}  onChange={(e) => onChange(e.target.value)}/>
+	)
 }
 
 const DrumMachine = () => {
 
 	const [powerStatus, setPowerStatus] = useState("off");
-	const [visorString, setVisorString] = useState("");
+	const [displayString, setDisplayString] = useState("");
 	const [clickedButtons, setClickedButtons] = useState({});
-
-	const handleClick = (key) => {
-		setClickedButtons((prev) => ({...prev, [key]: !prev[key]}));
-
-		if (powerStatus === 'on')
-			setVisorString(keys[key].text);
-
-		setTimeout(() => {
-			setClickedButtons((prev) => ({...prev, [key]: !prev[key]}));
-		}, 150)
-	}
-
-	const handlePowerClick = () => {
-		setPowerStatus(() => powerStatus === 'on'? 'off' : 'on');		
-	}
+	const [volume, setVolume] = useState(100);
 
 	useEffect(() => {
-		setVisorString(powerStatus === 'on'? 'Power on' : 'Power off');
+		setDisplayString(powerStatus === 'on' ? 'Power on' : 'Power off');
 
 		setTimeout(() => {
-			setVisorString("");
+			setDisplayString("");
 		}, 1000)
 
 	}, [powerStatus])
 
+	const handleClick = (key, event) => {
+		setClickedButtons((prev) => ({ ...prev, [key]: !prev[key] }));
+
+		const audio = event.target.children[0];
+		if (powerStatus === 'on' && audio) {
+			setDisplayString(keys[key].text);
+			audio.volume = volume / 100;
+			audio.pause();
+			audio.currentTime = 0;
+			audio.play();
+		}
+
+		setTimeout(() => {
+			setClickedButtons((prev) => ({ ...prev, [key]: !prev[key] }));
+		}, 150)
+	}
+
+	const handlePowerClick = () => {
+		setPowerStatus(() => powerStatus === 'on' ? 'off' : 'on');
+	}
+
+	const adjustVolume = (volume) => {
+		setVolume(volume);
+		if (powerStatus === 'on')
+			setDisplayString(`Volume: ${volume}`);
+	}
+
 	return (
-		<div id="drum-machine" className={`${styles.drumMachine} ${styles.metal}`}>
+		<div id="drum-machine" className={`${styles.drumMachine} ${metal.metal}`}>
 			<div className={styles.header}>
-				<div className={styles.visor}>
-					<p>{visorString}</p>
+				<div id="display" className={styles.display}>
+					<p>{displayString}</p>
 				</div>
-				<PowerButton status={powerStatus} onClick={handlePowerClick}/>
+				<PowerButton status={powerStatus} onClick={handlePowerClick} />
 			</div>
-			<div className={styles.buttonsContainer}>
-				<Buttons status={powerStatus} clickedButtons={clickedButtons} onClick={handleClick}/>
+			<div className={styles.drumPadContainer}>
+				<DrumPads status={powerStatus} clickedButtons={clickedButtons} onClick={handleClick} />
+			</div>
+			<div className={styles.sliderContainer}>
+				<VolumeControl value={volume} onChange={adjustVolume}/>
 			</div>
 		</div>
 	)
