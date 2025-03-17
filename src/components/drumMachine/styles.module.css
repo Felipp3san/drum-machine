@@ -1,0 +1,192 @@
+.metal {
+  background-image: -webkit-repeating-linear-gradient(
+      left,
+      hsla(0, 0%, 100%, 0) 0%,
+      hsla(0, 0%, 100%, 0) 6%,
+      hsla(0, 0%, 100%, 0.1) 7.5%
+    ),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 0%, 0) 0%, hsla(
+            0,
+            0%,
+            0%,
+            0
+          )
+          4%, hsla(0, 0%, 0%, 0.03) 4.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          1.2%, hsla(0, 0%, 100%, 0.15) 2.2%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          3%, hsla(0, 0%, 100%, 0.08) 4%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 0%, 0) 0%, hsla(
+            0,
+            0%,
+            0%,
+            0
+          )
+          2.5%, hsla(0, 0%, 0%, 0.02) 3%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          1%, hsla(0, 0%, 100%, 0.12) 1.8%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          2.2%, hsla(0, 0%, 100%, 0.1) 3%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 0%, 0) 0%, hsla(
+            0,
+            0%,
+            0%,
+            0
+          )
+          1.8%, hsla(0, 0%, 0%, 0.04) 2.2%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          1.5%, hsla(0, 0%, 100%, 0.2) 2.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          0.8%, hsla(0, 0%, 100%, 0.08) 1.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 0%, 0) 0%, hsla(
+            0,
+            0%,
+            0%,
+            0
+          )
+          0.6%, hsla(0, 0%, 0%, 0.02) 1.2%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          0.5%, hsla(0, 0%, 100%, 0.1) 1%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          0.3%, hsla(0, 0%, 100%, 0.07) 0.8%),
+    linear-gradient(
+      180deg,
+      hsl(0, 0%, 60%) 0%,
+      hsl(0, 0%, 55%) 47%,
+      hsl(0, 0%, 70%) 53%,
+      hsl(0, 0%, 55%) 100%
+    );
+}
+
+.drumMachine {
+  background-color: #646464;
+  box-sizing: border-box;
+  margin: auto;
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.header {
+  margin: 20px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.visor {
+  background-color: rgb(48, 48, 48);
+  color: greenyellow;
+  font-family: "CustomFont", sans-serif;
+  font-size: 2rem;
+  width: 300px;
+  border-radius: 4px;
+  padding-left: 10px;
+  box-shadow: rgb(0, 0, 0) 3px 3px 6px 0px inset,
+    rgba(0, 0, 0, 0.5) -3px -3px 6px 1px inset;
+}
+
+.powerButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 1px 3px 0px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.powerButton.on {
+  box-shadow: 0 0 6px 4px rgba(0, 200, 83, 0.3); /* Softer green glow */
+  background-color: rgb(118, 250, 173);
+  color: #00c853;
+}
+
+.powerButton.off {
+  box-shadow: 0 0 6px 4px rgba(213, 0, 0, 0.3); /* Softer red glow */
+  background-color: rgb(250, 149, 149);
+  color: #d50000;
+}
+
+.powerButton:hover {
+  filter: brightness(1.2); /* Slightly brighten on hover for extra effect */
+}
+
+.visor p {
+  margin: 0;
+}
+
+.buttonsContainer {
+  height: 70%;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.buttons {
+  font-size: 2rem;
+  display: flex;
+  color: rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transition: background-color 0.1s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.normal {
+  box-shadow: 1px 3px 2px rgba(0, 0, 0, 0.2);
+}
+
+.clicked {
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5); /* Inward shadow on click */
+}
