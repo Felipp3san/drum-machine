@@ -74,7 +74,7 @@ const DrumPads = ({ status, clickedButtons, onClick }) => {
 			<div id={keys[key].text} key={keys[key].text}
 				className={`drum-pad ${styles.drumPad} ${drumPadStyle}`} style={{ backgroundColor }}
 				onClick={() => onClick(key, event)}>
-				<audio id={key} className='clip' src={`src/assets/sounds/${sound}`}>Your browser does not support the audio element.</audio>
+				<audio id={key} className='clip' src={`/sounds/${sound}`}>Your browser does not support the audio element.</audio>
 				{key}
 			</div>
 		)
