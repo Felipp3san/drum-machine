@@ -51,7 +51,7 @@ const VolumeControl = ({ value, onChange }) => {
 
 const DrumMachine = () => {
 
-	const [powerStatus, setPowerStatus] = useState("off");
+	const [powerStatus, setPowerStatus] = useState("on");
 	const [displayString, setDisplayString] = useState("");
 	const [clickedButtons, setClickedButtons] = useState({});
 	const [volume, setVolume] = useState(50);
