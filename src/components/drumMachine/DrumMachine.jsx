@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import slider from './slider.module.css';
-import metal from './metal.module.css';
+import toggleSwitch from './switch.module.css';
 import { FaPowerOff } from "react-icons/fa";
 
 const keys = {
@@ -57,7 +57,7 @@ const PowerButton = ({ status, onClick }) => {
 	const buttonStyle = isOn ? styles.on : styles.off;
 
 	return (
-		<div className={`${styles.powerButton} ${buttonStyle}`} onClick={onClick}>
+		<div className={`${styles.powerButton} ${buttonStyle}`} onClick={() => onClick()}>
 			<FaPowerOff />
 		</div>
 	)
@@ -81,9 +81,18 @@ const DrumPads = ({ status, clickedButtons, onClick }) => {
 	})
 }
 
-const VolumeControl = ({value, onChange}) => {
+const BankControl = ({ bank, onClick }) => {
+	const position = bank === 1 ? toggleSwitch.left : toggleSwitch.right
 	return (
-		<input className={slider.slider} type='range' min='0' max='100' step='1' value={value}  onChange={(e) => onChange(e.target.value)}/>
+		<div className={toggleSwitch.select}>
+			<div className={`${toggleSwitch.inner} ${position}`} onClick={() => onClick()} />
+		</div>
+	)
+}
+
+const VolumeControl = ({ value, onChange }) => {
+	return (
+		<input className={slider.slider} type='range' min='0' max='100' step='1' value={value} onChange={(e) => onChange(e.target.value)} />
 	)
 }
 
@@ -93,6 +102,7 @@ const DrumMachine = () => {
 	const [displayString, setDisplayString] = useState("");
 	const [clickedButtons, setClickedButtons] = useState({});
 	const [volume, setVolume] = useState(100);
+	const [bank, setBank] = useState(1);
 
 	useEffect(() => {
 		setDisplayString(powerStatus === 'on' ? 'Power on' : 'Power off');
@@ -121,7 +131,7 @@ const DrumMachine = () => {
 	}
 
 	const handlePowerClick = () => {
-		setPowerStatus(() => powerStatus === 'on' ? 'off' : 'on');
+		setPowerStatus((prevStatus) => prevStatus === 'on' ? 'off' : 'on');
 	}
 
 	const adjustVolume = (volume) => {
@@ -130,8 +140,21 @@ const DrumMachine = () => {
 			setDisplayString(`Volume: ${volume}`);
 	}
 
+	const switchBank = () => {
+		setBank(prevBank => {
+			const newBank = prevBank === 1 ? 2 : 1;
+			if (powerStatus === 'on') {
+				setDisplayString(`Bank: ${newBank}`);
+			}
+			return newBank;
+		});
+	}
+
 	return (
-		<div id="drum-machine" className={`${styles.drumMachine} ${metal.metal}`}>
+		<div id="drum-machine" className={`${styles.drumMachine}`}>
+			<div className={styles.logoContainer}>
+				<p className={styles.logo}>Drum Machine</p>
+			</div>
 			<div className={styles.header}>
 				<div id="display" className={styles.display}>
 					<p>{displayString}</p>
@@ -141,8 +164,19 @@ const DrumMachine = () => {
 			<div className={styles.drumPadContainer}>
 				<DrumPads status={powerStatus} clickedButtons={clickedButtons} onClick={handleClick} />
 			</div>
-			<div className={styles.sliderContainer}>
-				<VolumeControl value={volume} onChange={adjustVolume}/>
+			<div className={styles.controlsContainer}>
+				<div className={styles.controlContainer}>
+					<BankControl bank={bank} onClick={switchBank} />
+					<div className={styles.controlsLabelContainer}>
+						<p className={styles.controlsLabel}>Bank</p>
+					</div>
+				</div>
+				<div className={styles.controlContainer}>
+					<VolumeControl value={volume} onChange={adjustVolume} />
+					<div className={styles.controlsLabelContainer}>
+						<p className={styles.controlsLabel}>Volume</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	)
