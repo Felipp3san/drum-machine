@@ -58,6 +58,22 @@ const DrumMachine = () => {
 	const [bank, setBank] = useState(1);
 
 	useEffect(() => {
+		const handleKeyPress = (e) => {
+			if (e.repeat) return;
+			const key = e.key.toUpperCase();
+
+			if (key in keys)
+				handleClick(key);
+		}
+
+		document.addEventListener('keydown', handleKeyPress);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyPress);
+		}
+	}, [powerStatus, volume, keys, bank]);
+
+	useEffect(() => {
 		setDisplayString(powerStatus === 'on' ? 'Power on' : 'Power off');
 
 		setTimeout(() => {
@@ -66,10 +82,11 @@ const DrumMachine = () => {
 
 	}, [powerStatus])
 
-	const handleClick = (key, event) => {
+	const handleClick = (key) => {
 		setClickedButtons((prev) => ({ ...prev, [key]: !prev[key] }));
 
-		const audio = event.target.children[0];
+		const audio = document.getElementById(key);
+
 		if (powerStatus === 'on' && audio) {
 			setDisplayString(keys[key]['text'][bank]);
 			audio.volume = volume / 100;
@@ -80,7 +97,7 @@ const DrumMachine = () => {
 
 		setTimeout(() => {
 			setClickedButtons((prev) => ({ ...prev, [key]: !prev[key] }));
-		}, 150)
+		}, 100)
 	}
 
 	const handlePowerClick = () => {
