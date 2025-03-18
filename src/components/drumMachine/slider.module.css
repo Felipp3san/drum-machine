@@ -24,6 +24,7 @@
   background: rgb(153, 153, 153);
   cursor: pointer;
   -webkit-appearance: none;
+  margin-left: 5px;
   margin-top: -8px;
 }
 [type='range']:focus::-webkit-slider-runnable-track {

@@ -3,54 +3,7 @@ import styles from './styles.module.css';
 import slider from './slider.module.css';
 import toggleSwitch from './switch.module.css';
 import { FaPowerOff } from "react-icons/fa";
-
-const keys = {
-	'Q': {
-		text: 'Heater 1',
-		sound: 'Heater-1.mp3',
-		backgroundColor: '#FF8A66',
-	},
-	'W': {
-		text: 'Heater 2',
-		sound: 'Heater-2.mp3',
-		backgroundColor: '#FFB84D',
-	},
-	'E': {
-		text: 'Heater 3',
-		sound: 'Heater-3.mp3',
-		backgroundColor: '#FFDC66',
-	},
-	'A': {
-		text: 'Heater 4',
-		sound: 'Heater-4_1.mp3',
-		backgroundColor: '#E4F9D0',
-	},
-	'S': {
-		text: 'Clap',
-		sound: 'Heater-6.mp3',
-		backgroundColor: '#66FF8F',
-	},
-	'D': {
-		text: 'Open-HH',
-		sound: 'Dsc_Oh.mp3',
-		backgroundColor: '#4CFFB8',
-	},
-	'Z': {
-		text: "Kick-n'-Hat",
-		sound: 'Kick_n_Hat.mp3',
-		backgroundColor: '#66FFFF',
-	},
-	'X': {
-		text: 'Kick',
-		sound: 'RP4_KICK_1.mp3',
-		backgroundColor: '#6699FF',
-	},
-	'C': {
-		text: 'Closed-HH',
-		sound: 'Cev_H2.mp3',
-		backgroundColor: '#B966FF',
-	}
-};
+import keys from '../assets/constants/keys';
 
 const PowerButton = ({ status, onClick }) => {
 	const isOn = status === 'on';
@@ -63,15 +16,15 @@ const PowerButton = ({ status, onClick }) => {
 	)
 }
 
-const DrumPads = ({ status, clickedButtons, onClick }) => {
+const DrumPads = ({ status, bank, clickedButtons, onClick }) => {
 	return Object.keys(keys).map((key) => {
-		const sound = keys[key]['sound'];
+		const sound = keys[key]['sound'][bank];
 		const isClicked = clickedButtons[key];
 		const drumPadStyle = isClicked ? styles.clicked : styles.normal;
 		const backgroundColor = isClicked && status === 'on' ? keys[key].backgroundColor : 'rgb(230, 230, 230)';
 
 		return (
-			<div id={keys[key].text} key={keys[key].text}
+			<div id={keys[key]['text'][bank]} key={keys[key]['text'][bank]}
 				className={`drum-pad ${styles.drumPad} ${drumPadStyle}`} style={{ backgroundColor }}
 				onClick={() => onClick(key, event)}>
 				<audio id={key} className='clip' src={`/sounds/${sound}`}>Your browser does not support the audio element.</audio>
@@ -101,7 +54,7 @@ const DrumMachine = () => {
 	const [powerStatus, setPowerStatus] = useState("off");
 	const [displayString, setDisplayString] = useState("");
 	const [clickedButtons, setClickedButtons] = useState({});
-	const [volume, setVolume] = useState(100);
+	const [volume, setVolume] = useState(50);
 	const [bank, setBank] = useState(1);
 
 	useEffect(() => {
@@ -118,7 +71,7 @@ const DrumMachine = () => {
 
 		const audio = event.target.children[0];
 		if (powerStatus === 'on' && audio) {
-			setDisplayString(keys[key].text);
+			setDisplayString(keys[key]['text'][bank]);
 			audio.volume = volume / 100;
 			audio.pause();
 			audio.currentTime = 0;
@@ -162,7 +115,7 @@ const DrumMachine = () => {
 				<PowerButton status={powerStatus} onClick={handlePowerClick} />
 			</div>
 			<div className={styles.drumPadContainer}>
-				<DrumPads status={powerStatus} clickedButtons={clickedButtons} onClick={handleClick} />
+				<DrumPads status={powerStatus} bank={bank} clickedButtons={clickedButtons} onClick={handleClick} />
 			</div>
 			<div className={styles.controlsContainer}>
 				<div className={styles.controlContainer}>
