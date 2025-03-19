@@ -21,6 +21,7 @@ const DrumPads = ({ status, bank, clickedButtons, onClick }) => {
 		const sound = keys[key]['sound'][bank];
 		const isClicked = clickedButtons[key];
 		const drumPadStyle = isClicked ? styles.clicked : styles.normal;
+		const textStyle = isClicked ? styles.clickedText : styles.normalText;
 		const backgroundColor = isClicked && status === 'on' ? keys[key].backgroundColor : 'rgb(230, 230, 230)';
 
 		return (
@@ -28,7 +29,7 @@ const DrumPads = ({ status, bank, clickedButtons, onClick }) => {
 				className={`drum-pad ${styles.drumPad} ${drumPadStyle}`} style={{ backgroundColor }}
 				onClick={() => onClick(key, event)}>
 				<audio id={key} className='clip' src={`/sounds/${sound}`}>Your browser does not support the audio element.</audio>
-				{key}
+				<p className={textStyle}>{key}</p>
 			</div>
 		)
 	})
